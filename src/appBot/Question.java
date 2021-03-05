@@ -8,4 +8,9 @@ public class Question {
     public Hero getHeroFromAnswer(String answer){
         return this.answers.get(answer);
     }
+    
+    public Question(String question, Map<String, Hero> answers){
+        this.question = question;
+        this.answers = answers;
+    }
 }
