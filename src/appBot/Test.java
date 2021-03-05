@@ -7,7 +7,14 @@ public class Test {
     public Set<Question> usedQuestions;
     private Map<Hero, Integer> progress;
 
-    public Test() {
+    public Test(String name, Set<Question> questions){
+        this.name = name;
+        this.questions = questions;
+        this.progress = new HashMap<>();
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     private void enterProgress(Hero hero){
