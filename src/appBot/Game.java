@@ -3,7 +3,7 @@ package appBot;
 import java.util.Set;
 
 public class Game {
-    public Set<Test> tests;
+    public static Set<Test> tests;
     public Player player;
     private Test currentTest;
 
