@@ -13,4 +13,8 @@ public class Question {
         this.question = question;
         this.answers = answers;
     }
+
+    public String getQuestion() { return question; }
+
+    public Map<String, Hero> getAnswers() { return answers; }
 }

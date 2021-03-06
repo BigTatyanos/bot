@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Test {
     private String name;
-    public Set<Question> questions;
-    public Set<Question> usedQuestions;
+    private Set<Question> questions;
+    private Set<Question> usedQuestions;
     private Map<Hero, Integer> progress;
 
     public Test(String name, Set<Question> questions){
@@ -16,6 +16,8 @@ public class Test {
     public String getName() {
         return this.name;
     }
+
+    public Set<Question> getQuestions() {return questions; }
 
     private void enterProgress(Hero hero){
         if(this.progress.containsKey(hero))

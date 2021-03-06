@@ -3,11 +3,14 @@ package appBot;
 import java.util.*;
 
 public class ConsoleCommunication {
-    public static String getUserInput(){
-        Scanner in = new Scanner(System.in);
+    private Scanner in = new Scanner(System.in);
+    public String getUserInput(){
         String input = in.nextLine();
-        in.close();
         return input;
+    }
+
+    public void closeScanner(){
+        in.close();
     }
 
     public static void printText(String text) {
@@ -19,25 +22,25 @@ public class ConsoleCommunication {
         System.out.print(message);
     }
 
-    public static void getTestsNames(){
-        for(Test test : Game.tests)
+    public void getTestsNames(Game game){
+        for(Test test : game.getTests())
         {
             System.out.println(test.getName());
         }
     }
 
-    public static void HandleUserCommand(){
+    public void HandleUserCommand(Game game){
         String userInput = getUserInput();
         if(userInput.equals("/help")){
             printHello();
         }
         else if(userInput.equals("/start"))
         {
-            getTestsNames();
+            getTestsNames(game);
         }
     }
 
-    public static String HandleUserInput(){
+    public String HandleUserInput(){
         String userInput = getUserInput();
         return userInput + userInput;
     }
