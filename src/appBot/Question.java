@@ -14,7 +14,11 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getQuestion() { return question; }
+    public boolean checkValidAnswer(String answer){
+        return answers.containsKey(answer);
+    }
 
-    public Map<String, Hero> getAnswers() { return answers; }
+    public String getQuestion() { return this.question; }
+
+    public Map<String, Hero> getAnswers() { return this.answers; }
 }

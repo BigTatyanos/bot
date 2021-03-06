@@ -28,11 +28,11 @@ public class Hero {
         this.testName = testName;
     }
 
-    public String getDiscription(){
+    public String getDescription(){
         return this.description;
     }
 
-    public void setDiscription(String discription){
-        this.description = discription;
+    public void setDescription(String description){
+        this.description = description;
     }
 }

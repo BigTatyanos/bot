@@ -1,9 +1,6 @@
 package appBot;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DataPutter {
 
@@ -30,9 +27,10 @@ public class DataPutter {
             k++;
         }
 
-        Set<Question> questions = new HashSet<>();
+        List<Question> questions = new ArrayList<>();
         String questionName = "";
-        for(int i = 2; i < parsedData.length; i++) {
+        int i = 2;
+        for(; i < parsedData.length && !parsedData[i].equals("#"); i++) {
             Map<String, Hero> qAnswers = new HashMap<>();
             String[] questionData = parsedData[i].split("[|]");
             questionName = questionData[0];
@@ -45,6 +43,12 @@ public class DataPutter {
             Question question = new Question(questionName, qAnswers);
             questions.add(question);
 
+        }
+        for(i++; i < parsedData.length; i++) {
+            String heroName = parsedData[i].split("[|]")[0];
+            String description = parsedData[i].split("[|]")[1];
+            Hero hero = findHeroByName(resultHeroes, heroName);
+            hero.setDescription(description);
         }
         downloadedTests.add(new Test(testName, questions));
     }

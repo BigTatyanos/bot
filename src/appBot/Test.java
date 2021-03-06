@@ -3,40 +3,39 @@ import java.util.*;
 
 public class Test {
     private String name;
-    private Set<Question> questions;
-    private Set<Question> usedQuestions;
+    private List<Question> questions;
+    private List<Question> usedQuestions;
     private Map<Hero, Integer> progress;
 
-    public Test(String name, Set<Question> questions){
+    public Test(String name, List<Question> questions){
         this.name = name;
         this.questions = questions;
         this.progress = new HashMap<>();
+        this.usedQuestions = new ArrayList<>();
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public Set<Question> getQuestions() {return questions; }
+    public List<Question> getQuestions() {return questions; }
 
-    private void enterProgress(Hero hero){
-        if(this.progress.containsKey(hero))
-            this.progress.put(hero, progress.get(hero) + 1);
+    public void enterProgress(Hero hero){
+        if(progress.containsKey(hero))
+            progress.put(hero, progress.get(hero) + 1);
         else
-            this.progress.put(hero, 1);
+            progress.put(hero, 1);
     }
 
-    private Question getQuestion(){
-        for (Question question : questions) {
-            this.usedQuestions.add(question);
-            this.questions.remove(question);
-            return question;
-        }
-        return null;
+    public Question getQuestion(){
+        Question question = questions.get(0);
+        usedQuestions.add(question);
+        questions.remove(question);
+        return question;
     }
 
     public Hero getResult(){
-        Integer maxRes = Collections.max(this.progress.values());
+        Integer maxRes = Collections.max(progress.values());
 
         for (Hero hero : progress.keySet()) {
             Integer obj = progress.get(hero);
@@ -49,8 +48,8 @@ public class Test {
         return null;
     }
 
-    private void dropResultsTest(){
-        this.questions.addAll(this.usedQuestions);
+    public void dropResultsTest(){
+        this.questions.addAll(usedQuestions);
         this.usedQuestions.clear();
         this.progress.clear();
     }

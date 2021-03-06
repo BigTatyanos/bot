@@ -3,7 +3,6 @@ package appBot;
 public class Main {
 
     public static void main(String[] args) {
-        FileWorker.getTestsFromFile();
         Game game = new Game();
 
         ConsoleCommunication cc = new ConsoleCommunication();
@@ -16,6 +15,9 @@ public class Main {
             boolean response = cc.HandleUserCommand(game);
             if (response)
                 break;
+            else if(game.getCurrentTest() != null){
+                game.playTest(cc);
+            }
         }
         cc.closeScanner();
     }
