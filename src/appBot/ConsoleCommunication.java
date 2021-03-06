@@ -14,34 +14,48 @@ public class ConsoleCommunication {
     }
 
     public static void printText(String text) {
-        System.out.print(text);
+        System.out.println(text);
     }
 
-    public static void printHello(){
-        String message = "Привет, это ТестБот.\n";
-        System.out.print(message);
+    public void printHello(){
+        String message = "Привет, это ТестБот.";
+        printText(message);
+    }
+    public String getPlayerName(){
+        printText("Как Вас зовут?");
+        String playerName = getUserInput();
+        return playerName;
     }
 
     public void getTestsNames(Game game){
         for(Test test : game.getTests())
         {
-            System.out.println(test.getName());
+            printText(test.getName());
         }
     }
 
-    public void HandleUserCommand(Game game){
+    public boolean HandleUserCommand(Game game){
         String userInput = getUserInput();
         if(userInput.equals("/help")){
             printHello();
+            return false;
         }
-        else if(userInput.equals("/start"))
-        {
+        else if(userInput.equals("/start")){
+            printText("Какой тест хочешь пройти? Вот список тестов:");
             getTestsNames(game);
+            return false;
+        }
+        else if (userInput.equals("/exit")){
+            printText("Пока, до скорой встречи!");
+            return true;
+        }
+        else {
+            printText(HandleUserInput(userInput));
+            return false;
         }
     }
 
-    public String HandleUserInput(){
-        String userInput = getUserInput();
-        return userInput + userInput;
+    public String HandleUserInput(String userInput){
+        return userInput + userInput + "\n";
     }
 }

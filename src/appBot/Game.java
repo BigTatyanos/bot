@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class Game {
     private Set<Test> tests;
-    public Player player;
+    private Player player;
     private Test currentTest;
 
     public Game(){
@@ -22,4 +22,13 @@ public class Game {
     public Set<Test> getTests() {
         return tests;
     }
+
+    public void setPlayer(Player player){
+        this.player = player;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
 }
