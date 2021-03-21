@@ -1,5 +1,3 @@
-//package appBot;
-
 import java.util.*;
 
 public class ConsoleCommunication {
