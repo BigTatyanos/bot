@@ -6,6 +6,7 @@ public class Test {
     private List<Question> questions;
     private List<Question> usedQuestions;
     private Map<Hero, Integer> progress;
+    private Question currentQuestion;
 
     public Test(String name, List<Question> questions){
         this.name = name;
@@ -52,6 +53,14 @@ public class Test {
         this.questions.addAll(usedQuestions);
         this.usedQuestions.clear();
         this.progress.clear();
+    }
+
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(Question quest) {
+        currentQuestion = quest;
     }
 
 }

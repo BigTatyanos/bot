@@ -1,5 +1,7 @@
 //package appBot;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,10 +9,12 @@ public class Game {
     private Set<Test> tests;
     private Player player;
     private Test currentTest;
+    private boolean isNextQuestion;
 
     public Game() {
         FileWorker.getTestsFromFile();
         tests = DataPutter.getDownloadedTests();
+        isNextQuestion = true;
     }
 
     public void noteHero(Hero hero){
@@ -48,6 +52,11 @@ public class Game {
     public Test getCurrentTest(){
         return this.currentTest;
     }
+
+    public void changeIsNextQ() {
+        this.isNextQuestion = !this.isNextQuestion;
+    }
+    public boolean getIsNext() { return isNextQuestion; }
 
     public Test findTest(String name){
         for(Test test: tests){
