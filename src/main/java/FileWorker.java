@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 public class FileWorker{
     public static void getTestsFromFile() {
 
-        File path = new File(".\\src\\main\\resources\\tests");
+        File path = new File("./src/main/resources/tests");
         File [] files = path.listFiles();
         for (int i = 0; i < files.length; i++){
             if (files[i].isFile()){
@@ -42,7 +42,7 @@ public class FileWorker{
     }
 
     public static String getBotToken() {
-        File fileName = new File(".\\src\\main\\resources\\config.txt");
+        File fileName = new File("./src/main/resources/config.txt");
         StringBuilder result = new StringBuilder();
         try
         {

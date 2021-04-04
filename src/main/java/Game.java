@@ -13,7 +13,9 @@ public class Game {
 
     public Game() {
         FileWorker.getTestsFromFile();
-        tests = DataPutter.getDownloadedTests();
+        Set<Test> basicTests = DataPutter.getDownloadedTests();
+        tests = new HashSet<>();
+        tests.addAll(basicTests);
         isNextQuestion = true;
     }
 
