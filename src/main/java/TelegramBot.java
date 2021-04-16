@@ -4,8 +4,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
-
 public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
@@ -26,22 +24,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String answer = "";
         Game game = new Game();
-        synchronized (game) {
-            game = Handler.getGame(playerName, playerId);
-            answer = Handler.getInput(rMessage.getText(), game);
-        }
+        game = Handler.getGame(playerName, playerId);
+        answer = Handler.getInput(rMessage.getText(), game);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(answer);
         sendMessage.setChatId(playerId);
 
-//        for(Game curGame : Main.gamesList){
-//            if(curGame.getPlayer().getId().equals(playerId)) {
-//                Main.gamesList.remove(curGame);
-//                Main.gamesList.add(game);
-//                break;
-//            }
-//        }
+        sendMessage = TelegramCommunication.addKeyboard(sendMessage);
+
         try {
             if(!sendMessage.getText().isEmpty())
                 execute(sendMessage);
