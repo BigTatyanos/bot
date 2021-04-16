@@ -1,40 +1,55 @@
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TelegramCommunication {
-    private String id;
-    public TelegramCommunication(String id) {
-        this.id = id;
-    }
+
     public static String getPlayerName(Message rMessage) {
         return rMessage.getFrom().getFirstName();
-    }
-
-    public String getPlayerAnswer(Message rMessage) {
-        return rMessage.getText();
     }
 
     public static String getPlayerId(Message rMessage) {
         return rMessage.getFrom().getId().toString();
     }
 
-    public static SendMessage addText(SendMessage sMessage, String text) {
-        String oldtext = sMessage.getText();
-        if(oldtext != null)
-            sMessage.setText(oldtext + "\n" + text);
-        else sMessage.setText(text);
-        return sMessage;
-    }
+    public static SendMessage addKeyboard(SendMessage message) {
+        String[] parsedData = message.getText().split("\n");
 
-    private SendMessage getHelp(SendMessage sMessage) {
-        sMessage = addText(sMessage, "Введи /start, чтобы начать игру");
-        sMessage = addText(sMessage,"Введи /help, чтобы получить справку об игре");
-        sMessage = addText(sMessage,"Введи /exit, чтобы закончить игру");
-        sMessage = addText(sMessage,"Введи /heroes, чтобы вывести список своих полученных персонажей");
-        sMessage = addText(sMessage,"Это тест бот, в котором нужно выбирать тест и отвечать на вопросы, а в конце ты узнаешь, кто ты из персонажей");
-        return sMessage;
-    }
+        if(parsedData[0].equals("0")) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < parsedData.length; i++) {
+                sb.append(parsedData[i]).append("\n");
+            }
+            message.setText(sb.toString());
+            message.setReplyMarkup(new ReplyKeyboardRemove(true, false));
+            return message;
+        }
+        else {
+            SendMessage newSendMessage = new SendMessage();
+            ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
+            newSendMessage.enableMarkdown(true);
 
+
+            newSendMessage.setReplyMarkup(replyKeyboardMarkup);
+            List<KeyboardRow> keyboard = new ArrayList<>();
+            newSendMessage.setText(parsedData[0]);
+            for (int i = 1; i < parsedData.length; i++) {
+                KeyboardRow kRow = new KeyboardRow();
+                kRow.add(parsedData[i]);
+                keyboard.add(kRow);
+            }
+
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            newSendMessage.setChatId(message.getChatId());
+            return newSendMessage;
+        }
+    }
 }
