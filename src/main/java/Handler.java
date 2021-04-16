@@ -1,14 +1,6 @@
 import java.util.Set;
 
 public class Handler {
-    public static void handle(){
-        for(Game game : Main.gamesList){
-
-            System.out.println(game.getPlayer().getName());
-            System.out.println(game.getCurrentTest().getName());
-        }
-    }
-
     public static Game getGame(String playerName, String playerId) {
         Game game = findGame(playerId);
         if(game == null) {
@@ -35,7 +27,6 @@ public class Handler {
             if(game.getCurrentTest().getCurrentQuestion() != null) {
                 String checkAnswerResult = checkAnswer(userInput, game);
                 if(checkAnswerResult != null) {
-                    sb.append(checkAnswerResult);
                     if (checkAnswerResult.equals("Следующий вопрос:")) {
                         sb.append(sendQuestion(game));
                         game.changeIsNextQ();
@@ -44,22 +35,25 @@ public class Handler {
                 else return endTest(game);
 
             }
-//            if(game.getIsNext()) {
-//                sb.append(sendQuestion(game));
-//                game.changeIsNextQ();
-//            }
         }
         else {
             if (userInput.equals("/help")) {
-                sb.append("To do: make help").append("\n");
+                sb.append("0\n");
+                sb.append("Введи /start, чтобы начать игру").append("\n");
+                sb.append("Введи /help, чтобы получить справку об игре").append("\n");
+                sb.append("Введи /exit, чтобы закончить игру").append("\n");
+                sb.append("Введи /heroes, чтобы вывести список своих полученных персонажей").append("\n");
+                sb.append("Это тест бот, в котором нужно выбирать тест и отвечать на вопросы, а в конце ты узнаешь, кто ты из персонажей").append("\n");
             } else if (userInput.equals("/start")) {
                 sb.append("Какой тест хочешь пройти? Вот список тестов:").append("\n");
                 for (String testName : game.getTestsNames())
                     sb.append(testName).append("\n");
             } else if (userInput.equals("/exit")) {
+                sb.append("0\n");
                 sb.append("Пока, до скорой встречи!").append("\n");
             } else if (userInput.equals("/heroes")) {
                 Set<Hero> heroes = game.getPlayer().getHeroes();
+                sb.append("0\n");
                 if (heroes.isEmpty()) {
                     sb.append("Ты ещё не прошёл ни одного теста").append("\n");
                 } else {
@@ -71,9 +65,9 @@ public class Handler {
                 game.setCurrentTest(game.findTest(userInput));
                 Test currentTest = game.getCurrentTest();
                 currentTest.setCurrentQuestion(currentTest.getQuestion());
-                sb.append("Выгружаю тест...").append("\n");
                 sb.append(sendQuestion(game));
             } else {
+                sb.append("0\n");
                 sb.append("Некорректная строка").append("\n");
             }
         }
@@ -83,14 +77,11 @@ public class Handler {
     private static String sendQuestion(Game game) {
         StringBuilder sb = new StringBuilder();
         if(!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
-            //Question quest = game.getCurrentTest().getQuestion();
             Question quest = game.getCurrentTest().getCurrentQuestion();
-            //game.getCurrentTest().setCurrentQuestion(quest);
             sb.append(quest.getQuestion()).append("\n");
             for (String answer : quest.getAnswers().keySet()) {
                 sb.append(answer).append("\n");
             }
-            //game.getCurrentTest().setCurrentQuestion(game.getCurrentTest().getQuestion());
             return sb.toString();
         }
         return endTest(game);
@@ -98,17 +89,7 @@ public class Handler {
 
     private static String checkAnswer(String userInput, Game game) {
         if(!game.checkEndTest()) {
-            //Question quest = game.getCurrentTest().getQuestion();
             Question quest = game.getCurrentTest().getCurrentQuestion();
-            if(userInput.equals("/1"))
-                userInput = (String) quest.getAnswers().keySet().toArray()[0];
-            else if(userInput.equals("/2"))
-                userInput = (String) quest.getAnswers().keySet().toArray()[1];
-            else if(userInput.equals("/3"))
-                userInput = (String) quest.getAnswers().keySet().toArray()[2];
-            else if(userInput.equals("/4"))
-                userInput = (String) quest.getAnswers().keySet().toArray()[3];
-
             if (quest.checkValidAnswer(userInput)) {
                 quest.getHeroFromAnswer(userInput);
                 game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
@@ -124,6 +105,7 @@ public class Handler {
     private static String endTest(Game game) {
         StringBuilder sb = new StringBuilder();
         if (game.checkEndTest()) {
+            sb.append("0\n");
             Hero resHero = game.getCurrentTest().getResult();
             sb.append(resHero.getName()).append("\n");
             sb.append(resHero.getDescription()).append("\n");
