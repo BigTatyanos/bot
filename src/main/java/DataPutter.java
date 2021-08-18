@@ -1,16 +1,11 @@
-//package appBot;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataPutter {
 
     private static Set<Test> downloadedTests = new HashSet<>();
-    private static Hero findHeroByName(Hero[] heroes, String heroName){
-        for(Hero hero : heroes){
-            if(hero.getName().equals(heroName))
-                return hero;
-        }
-        return null;
+    private static Hero findHeroByName(Map<String, Hero> heroes, String heroName){
+        return heroes.getOrDefault(heroName, null);
     }
 
     public static void addData(String data){
@@ -19,16 +14,11 @@ public class DataPutter {
         String testName = parsedData[0];
         String[] heroes = parsedData[1].split("[|]");
 
-        Hero[] resultHeroes = new Hero[heroes.length];
-        int k = 0;
-        for(int i = 0; i < heroes.length; i++) {
-            Hero hero = new Hero(testName, heroes[i], heroes[i] + " description");
-            resultHeroes[k] = hero;
-            k++;
-        }
+        Map<String, Hero> resultHeroes;
+        resultHeroes = Arrays.stream(heroes).collect(Collectors.toMap(hero -> hero, hero -> new Hero(testName, hero, hero + " description")));
 
         List<Question> questions = new ArrayList<>();
-        String questionName = "";
+        String questionName;
         int i = 2;
         for(; i < parsedData.length && !parsedData[i].equals("#"); i++) {
             Map<String, Hero> qAnswers = new HashMap<>();
