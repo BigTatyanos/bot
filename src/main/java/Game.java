@@ -68,7 +68,7 @@ public class Game {
         while (true) {
             Question quest = getCurrentTest().getQuestion();
             ConsoleCommunication.printText(quest.getQuestion());
-            for (String answer : quest.getAnswers().keySet()) {
+            for (String answer : quest.getAnswers()) {
                 ConsoleCommunication.printText(answer);
             }
             while (true) {

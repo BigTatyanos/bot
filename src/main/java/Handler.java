@@ -79,7 +79,7 @@ public class Handler {
         if(!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
             Question quest = game.getCurrentTest().getCurrentQuestion();
             sb.append(quest.getQuestion()).append("\n");
-            for (String answer : quest.getAnswers().keySet()) {
+            for (String answer : quest.getAnswers()) {
                 sb.append(answer).append("\n");
             }
             return sb.toString();

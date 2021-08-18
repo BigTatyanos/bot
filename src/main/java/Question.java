@@ -1,5 +1,5 @@
-//package appBot;
 import java.util.Map;
+import java.util.Set;
 
 public class Question {
     private String question;
@@ -20,5 +20,5 @@ public class Question {
 
     public String getQuestion() { return this.question; }
 
-    public Map<String, Hero> getAnswers() { return this.answers; }
+    public Set<String> getAnswers() { return this.answers.keySet(); }
 }
