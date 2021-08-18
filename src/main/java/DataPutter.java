@@ -8,11 +8,10 @@ public class DataPutter {
         return heroes.getOrDefault(heroName, null);
     }
 
-    public static void addData(String data){
-        String[] parsedData = data.split("\n");
+    public static void addData(List<String> data){
 
-        String testName = parsedData[0];
-        String[] heroes = parsedData[1].split("[|]");
+        String testName = data.get(0);
+        String[] heroes = data.get(1).split("[|]");
 
         Map<String, Hero> resultHeroes;
         resultHeroes = Arrays.stream(heroes).collect(Collectors.toMap(hero -> hero, hero -> new Hero(testName, hero, hero + " description")));
@@ -20,9 +19,9 @@ public class DataPutter {
         List<Question> questions = new ArrayList<>();
         String questionName;
         int i = 2;
-        for(; i < parsedData.length && !parsedData[i].equals("#"); i++) {
+        for(; i < data.size() && !data.get(i).equals("#"); i++) {
             Map<String, Hero> qAnswers = new HashMap<>();
-            String[] questionData = parsedData[i].split("[|]");
+            String[] questionData = data.get(i).split("[|]");
             questionName = questionData[0];
             for(int j = 1; j < questionData.length; j++) {
                 String answer = questionData[j].split("[(]")[0];
@@ -34,9 +33,9 @@ public class DataPutter {
             questions.add(question);
 
         }
-        for(i++; i < parsedData.length; i++) {
-            String heroName = parsedData[i].split("[|]")[0];
-            String description = parsedData[i].split("[|]")[1];
+        for(i++; i < data.size(); i++) {
+            String heroName = data.get(i).split("[|]")[0];
+            String description = data.get(i).split("[|]")[1];
             Hero hero = findHeroByName(resultHeroes, heroName);
             hero.setDescription(description);
         }
