@@ -7,8 +7,7 @@ enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
         Game game = findGame(playerId);
-        if(game == null) {
-            game = new Game();
+        if(game.getPlayer() == null) {
             Player player = new Player(playerName, playerId);
             game.setPlayer(player);
             Main.gamesList.add(game);
@@ -18,11 +17,9 @@ public class Handler {
     }
 
     public static Game findGame(String playerId) {
-        for(Game game : Main.gamesList){
-            if(game.getPlayer().getId().equals(playerId))
-                return game;
-        }
-        return null;
+        return Main.gamesList.stream()
+                .filter(game -> game.getPlayer().getId().equals(playerId))
+                .findFirst().orElse(new Game());
     }
 
     public static TelegramAnswer getInput(String userInput, Game game) {
