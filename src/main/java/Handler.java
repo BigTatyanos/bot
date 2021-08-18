@@ -22,6 +22,16 @@ public class Handler {
                 .findFirst().orElse(new Game());
     }
 
+    private static List<String> getHelp() {
+        List<String> text = new ArrayList<>();
+        text.add("Введи /start, чтобы начать игру");
+        text.add("Введи /help, чтобы получить справку об игре");
+        text.add("Введи /exit, чтобы закончить игру");
+        text.add("Введи /heroes, чтобы вывести список своих полученных персонажей");
+        text.add("Это тест бот, в котором нужно выбирать тест и отвечать на вопросы, а в конце ты узнаешь, кто ты из персонажей");
+        return text;
+    }
+
     public static TelegramAnswer getInput(String userInput, Game game) {
         List<String> text = new ArrayList<>();
         List<String> buttonText = new ArrayList<>();
@@ -38,17 +48,12 @@ public class Handler {
                     }
                 }
                 else return endTest(game);
-
             }
         }
         else {
             if (userInput.equals("/help")) {
                 answer.hasKeyBoard = false;
-                text.add("Введи /start, чтобы начать игру");
-                text.add("Введи /help, чтобы получить справку об игре");
-                text.add("Введи /exit, чтобы закончить игру");
-                text.add("Введи /heroes, чтобы вывести список своих полученных персонажей");
-                text.add("Это тест бот, в котором нужно выбирать тест и отвечать на вопросы, а в конце ты узнаешь, кто ты из персонажей");
+                text.addAll(getHelp());
             } else if (userInput.equals("/start")) {
                 text.add("Какой тест хочешь пройти? Вот список тестов:");
                 buttonText.addAll(game.getTestsNames());
