@@ -1,7 +1,3 @@
-//package appBot;
-
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +8,7 @@ public class Game {
     private boolean isNextQuestion;
 
     public Game() {
-        FileWorker.getTestsFromFile();
+        FileWorker.loadTestsFromFile();
         Set<Test> basicTests = DataPutter.getDownloadedTests();
         tests = new HashSet<>();
         tests.addAll(basicTests);
