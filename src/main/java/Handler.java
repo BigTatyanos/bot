@@ -1,5 +1,7 @@
 import java.util.Set;
 
+enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
+
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
         Game game = findGame(playerId);
@@ -25,9 +27,9 @@ public class Handler {
         StringBuilder sb = new StringBuilder();
         if(game.getCurrentTest() != null) {
             if(game.getCurrentTest().getCurrentQuestion() != null) {
-                String checkAnswerResult = checkAnswer(userInput, game);
+                Answer checkAnswerResult = checkAnswer(userInput, game);
                 if(checkAnswerResult != null) {
-                    if (checkAnswerResult.equals("Следующий вопрос:")) {
+                    if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
                         sb.append(sendQuestion(game));
                         game.changeIsNextQ();
                     }
@@ -87,7 +89,7 @@ public class Handler {
         return endTest(game);
     }
 
-    private static String checkAnswer(String userInput, Game game) {
+    private static Answer checkAnswer(String userInput, Game game) {
         if(!game.checkEndTest()) {
             Question quest = game.getCurrentTest().getCurrentQuestion();
             if (quest.checkValidAnswer(userInput)) {
@@ -95,9 +97,9 @@ public class Handler {
                 game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
                 game.changeIsNextQ();
                 game.getCurrentTest().setCurrentQuestion(game.getCurrentTest().getQuestion());
-                return "Следующий вопрос:";
+                return Answer.NEXT_QUESTION;
             }
-            return "Нет такого ответа";
+            return Answer.NO_SUCH_ANSWER;
        }
        else return null;
     }
