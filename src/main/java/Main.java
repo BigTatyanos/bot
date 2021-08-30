@@ -48,15 +48,15 @@ public class Main {
             String userInput = cc.getUserInput();
             TelegramAnswer answer = Handler.getInput(userInput, game);
             if (answer.text != null) {
-                answer.text.forEach(System.out::println);
+                answer.text.forEach(ConsoleCommunication::printText);
                 if (answer.text.get(0).equals("Пока, до скорой встречи!"))
                     break;
             }
             if (answer.buttonText != null)
-                answer.buttonText.forEach(System.out::println);
+                answer.buttonText.forEach(ConsoleCommunication::printText);
         }
 
-        System.out.println("Игра окончена");
+        ConsoleCommunication.printText("Игра окончена");
         cc.closeScanner();
     }
 }

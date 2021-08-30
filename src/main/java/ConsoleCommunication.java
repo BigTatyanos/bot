@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleCommunication {
@@ -8,8 +9,7 @@ public class ConsoleCommunication {
     }
 
     public String getUserInput() {
-        String input = in.nextLine();
-        return input;
+        return in.nextLine();
     }
 
     public void closeScanner() {
@@ -29,10 +29,7 @@ public class ConsoleCommunication {
     }
 
     private void getHelp() {
-        printText("Введи /start, чтобы начать игру");
-        printText("Введи /help, чтобы получить справку об игре");
-        printText("Введи /exit, чтобы закончить игру");
-        printText("Введи /heroes, чтобы вывести список своих полученных персонажей");
-        printText("Это тест бот, в котором нужно выбирать тест и отвечать на вопросы, а в конце ты узнаешь, кто ты из персонажей");
+        List<String> helpMessage = Handler.getHelp();
+        helpMessage.forEach(ConsoleCommunication::printText);
     }
 }

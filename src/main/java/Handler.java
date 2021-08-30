@@ -22,7 +22,7 @@ public class Handler {
                 .findFirst().orElse(new Game());
     }
 
-    private static List<String> getHelp() {
+    public static List<String> getHelp() {
         List<String> text = new ArrayList<>();
         text.add("Введи /start, чтобы начать игру");
         text.add("Введи /help, чтобы получить справку об игре");
