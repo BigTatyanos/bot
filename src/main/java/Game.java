@@ -15,11 +15,11 @@ public class Game {
         isNextQuestion = true;
     }
 
-    public void noteHero(Hero hero){
+    public void noteHero(Hero hero) {
         this.player.heroes.put(currentTest, hero);
     }
 
-    public boolean checkEndTest(){
+    public boolean checkEndTest() {
         return currentTest.getQuestions().isEmpty();
     }
 
@@ -27,67 +27,43 @@ public class Game {
         return tests;
     }
 
-    public Set<String> getTestsNames(){
+    public Set<String> getTestsNames() {
         Set<String> testsNames = new HashSet<>();
-        for(Test test : tests) {
+        for (Test test : tests) {
             testsNames.add(test.getName());
         }
         return testsNames;
     }
 
-    public void setPlayer(Player player){
-        this.player = player;
-    }
-
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public void setCurrentTest(Test test){
-        this.currentTest = test;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
-    public Test getCurrentTest(){
+    public Test getCurrentTest() {
         return this.currentTest;
+    }
+
+    public void setCurrentTest(Test test) {
+        this.currentTest = test;
     }
 
     public void changeIsNextQ() {
         this.isNextQuestion = !this.isNextQuestion;
     }
-    public boolean getIsNext() { return isNextQuestion; }
 
-    public Test findTest(String name){
-        for(Test test: tests){
+    public boolean getIsNext() {
+        return isNextQuestion;
+    }
+
+    public Test findTest(String name) {
+        for (Test test : tests) {
             if (test.getName().equals(name))
                 return test;
         }
         return null;
-    }
-
-    public void playTest(ConsoleCommunication cc){
-        while (true) {
-            Question quest = getCurrentTest().getQuestion();
-            ConsoleCommunication.printText(quest.getQuestion());
-            for (String answer : quest.getAnswers()) {
-                ConsoleCommunication.printText(answer);
-            }
-            while (true) {
-                String answer = cc.getUserInput();
-                if (quest.checkValidAnswer(answer)) {
-                    quest.getHeroFromAnswer(answer);
-                    getCurrentTest().enterProgress(quest.getHeroFromAnswer(answer));
-                    break;
-                }
-            }
-            if (checkEndTest()){
-                Hero resHero = getCurrentTest().getResult();
-                ConsoleCommunication.printText(resHero.getName());
-                ConsoleCommunication.printText(resHero.getDescription());
-                noteHero(resHero);
-                getCurrentTest().dropResultsTest();
-                setCurrentTest(null);
-                break;
-            }
-        }
     }
 }
