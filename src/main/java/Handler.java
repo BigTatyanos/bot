@@ -16,7 +16,7 @@ public class Handler {
         return game;
     }
 
-    public static Game findGame(String playerId) {
+    private static Game findGame(String playerId) {
         return Main.gamesList.stream()
                 .filter(game -> game.getPlayer().getId().equals(playerId))
                 .findFirst().orElse(new Game());
