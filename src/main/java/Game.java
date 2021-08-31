@@ -1,13 +1,13 @@
 import java.util.HashSet;
 import java.util.Set;
 
-public class Game {
+class Game {
     private Set<Test> tests;
     private Player player;
     private Test currentTest;
     private boolean isNextQuestion;
 
-    public Game() {
+    Game() {
         FileWorker.loadTestsFromFile();
         Set<Test> basicTests = DataPutter.getDownloadedTests();
         tests = new HashSet<>();
@@ -15,19 +15,15 @@ public class Game {
         isNextQuestion = true;
     }
 
-    public void noteHero(Hero hero) {
+    void noteHero(Hero hero) {
         this.player.heroes.put(currentTest, hero);
     }
 
-    public boolean checkEndTest() {
+    boolean checkEndTest() {
         return currentTest.getQuestions().isEmpty();
     }
 
-    public Set<Test> getTests() {
-        return tests;
-    }
-
-    public Set<String> getTestsNames() {
+    Set<String> getTestsNames() {
         Set<String> testsNames = new HashSet<>();
         for (Test test : tests) {
             testsNames.add(test.getName());
@@ -35,31 +31,27 @@ public class Game {
         return testsNames;
     }
 
-    public Player getPlayer() {
+    Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    void setPlayer(Player player) {
         this.player = player;
     }
 
-    public Test getCurrentTest() {
+    Test getCurrentTest() {
         return this.currentTest;
     }
 
-    public void setCurrentTest(Test test) {
+    void setCurrentTest(Test test) {
         this.currentTest = test;
     }
 
-    public void changeIsNextQ() {
+    void changeIsNextQ() {
         this.isNextQuestion = !this.isNextQuestion;
     }
 
-    public boolean getIsNext() {
-        return isNextQuestion;
-    }
-
-    public Test findTest(String name) {
+    Test findTest(String name) {
         for (Test test : tests) {
             if (test.getName().equals(name))
                 return test;
