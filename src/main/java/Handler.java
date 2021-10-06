@@ -6,14 +6,8 @@ enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
-        Game game = Main.gamesMap.get(playerId);
-        if(game == null) {
-            Player player = new Player(playerName, playerId);
-            Game newGame = new Game(player);
-            Main.gamesMap.put(player.getId(), newGame);
-            return newGame;
-        }
-        return game;
+        Main.gamesMap.putIfAbsent(playerId, new Game(new Player(playerName, playerId)));
+        return Main.gamesMap.get(playerId);
     }
 
     public static List<String> getHelp() {
