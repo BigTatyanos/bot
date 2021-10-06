@@ -6,20 +6,14 @@ enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
-        Game game = findGame(playerId);
+        Game game = Main.gamesMap.getOrDefault(playerId, new Game());
         if(game.getPlayer() == null) {
             Player player = new Player(playerName, playerId);
             game.setPlayer(player);
-            Main.gamesList.add(game);
+            Main.gamesMap.put(player.getId(), game);
             return game;
         }
         return game;
-    }
-
-    private static Game findGame(String playerId) {
-        return Main.gamesList.stream()
-                .filter(game -> game.getPlayer().getId().equals(playerId))
-                .findFirst().orElse(new Game());
     }
 
     public static List<String> getHelp() {
@@ -112,8 +106,8 @@ public class Handler {
                 return Answer.NEXT_QUESTION;
             }
             return Answer.NO_SUCH_ANSWER;
-       }
-       else return null;
+        }
+        else return null;
     }
 
     private static TelegramAnswer endTest(Game game) {

@@ -4,7 +4,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
 
-    static java.util.List<Game> gamesList = new java.util.ArrayList<>();
+    static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
 
     public static void main(String[] args) {
 
@@ -32,8 +32,8 @@ public class Main {
             game2.setCurrentTest(game.findTest("Гарри? Гермиона? Рон?"));
             game2.setPlayer(player2);
             game2.noteHero(new Hero("Кто ты из губки Боба", "Спанч Боб", "SB description"));
-            gamesList.add(game1);
-            gamesList.add(game2);
+            gamesMap.put(player1.getId(), game1);
+            gamesMap.put(player2.getId(), game2);
 
 
             String playerName = cc.getPlayerName();
