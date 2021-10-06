@@ -1,17 +1,18 @@
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 class Game {
-    private Set<Test> tests;
+    private Map<String, Test> tests;
     private Player player;
     private Test currentTest;
     private boolean isNextQuestion;
 
     Game() {
         FileWorker.loadTestsFromFile();
-        Set<Test> basicTests = DataPutter.getDownloadedTests();
-        tests = new HashSet<>();
-        tests.addAll(basicTests);
+        Map<String, Test> basicTests = DataPutter.getDownloadedTests();
+        tests = new HashMap<>();
+        tests.putAll(basicTests);
         isNextQuestion = true;
     }
 
@@ -24,11 +25,7 @@ class Game {
     }
 
     Set<String> getTestsNames() {
-        Set<String> testsNames = new HashSet<>();
-        for (Test test : tests) {
-            testsNames.add(test.getName());
-        }
-        return testsNames;
+        return tests.keySet();
     }
 
     Player getPlayer() {
@@ -52,10 +49,6 @@ class Game {
     }
 
     Test findTest(String name) {
-        for (Test test : tests) {
-            if (test.getName().equals(name))
-                return test;
-        }
-        return null;
+        return tests.get(name);
     }
 }

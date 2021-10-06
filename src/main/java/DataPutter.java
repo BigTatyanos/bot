@@ -3,7 +3,7 @@ import java.util.stream.Collectors;
 
 public class DataPutter {
 
-    private static Set<Test> downloadedTests = new HashSet<>();
+    private static Map<String, Test> downloadedTests = new HashMap<>();
 
     public static void addData(List<String> data) {
 
@@ -36,10 +36,10 @@ public class DataPutter {
             Hero hero = resultHeroes.get(heroName);
             hero.setDescription(description);
         }
-        downloadedTests.add(new Test(testName, questions));
+        downloadedTests.put(testName, new Test(testName, questions));
     }
 
-    public static Set<Test> getDownloadedTests() {
+    public static Map<String, Test> getDownloadedTests() {
         return downloadedTests;
     }
 }
