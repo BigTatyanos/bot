@@ -8,7 +8,8 @@ class Game {
     private Test currentTest;
     private boolean isNextQuestion;
 
-    Game() {
+    Game(Player player) {
+        this.player = player;
         FileWorker.loadTestsFromFile();
         Map<String, Test> basicTests = DataPutter.getDownloadedTests();
         tests = new HashMap<>();
@@ -30,10 +31,6 @@ class Game {
 
     Player getPlayer() {
         return player;
-    }
-
-    void setPlayer(Player player) {
-        this.player = player;
     }
 
     Test getCurrentTest() {

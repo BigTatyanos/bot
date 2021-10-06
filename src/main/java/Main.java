@@ -19,33 +19,30 @@ public class Main {
                 e.printStackTrace();
             }
         } else {
-            Game game = new Game();
-
-            Game game1 = new Game();
-            Player player1 = new Player("Vova", "123");
-            game1.setCurrentTest(game.findTest("Кто ты из губки Боба"));
-            game1.setPlayer(player1);
-            game1.noteHero(new Hero("Гарри? Гермиона? Рон?", "Гарри Поттер", "HP description"));
-
-            Game game2 = new Game();
-            Player player2 = new Player("Masha", "987");
-            game2.setCurrentTest(game.findTest("Гарри? Гермиона? Рон?"));
-            game2.setPlayer(player2);
-            game2.noteHero(new Hero("Кто ты из губки Боба", "Спанч Боб", "SB description"));
-            gamesMap.put(player1.getId(), game1);
-            gamesMap.put(player2.getId(), game2);
-
-
             String playerName = cc.getPlayerName();
             String playerId = "001";
             Player player = new Player(playerName, playerId);
-            game.setPlayer(player);
-            game = Handler.getGame(player.getName(), playerId);
-
-            if (playerName.equals("Vova"))
-                game.setPlayer(player1);
-            else if (playerName.equals("Masha"))
-                game.setPlayer(player2);
+            Game game;
+            switch (playerName) {
+                case "Vova": {
+                    Game newGame = new Game(new Player(playerName, "123"));
+                    newGame.noteHero(new Hero("Гарри? Гермиона? Рон?", "Гарри Поттер", "HP description"));
+                    gamesMap.put(newGame.getPlayer().getId(), newGame);
+                    game = newGame;
+                    break;
+                }
+                case "Masha": {
+                    Game newGame = new Game(new Player(playerName, "987"));
+                    newGame.noteHero(new Hero("Кто ты из губки Боба", "Спанч Боб", "SB description"));
+                    gamesMap.put(newGame.getPlayer().getId(), newGame);
+                    game = newGame;
+                    break;
+                }
+                default: {
+                    game = Handler.getGame(player.getName(), playerId);
+                    break;
+                }
+            }
 
             while (true) {
                 String userInput = cc.getUserInput();

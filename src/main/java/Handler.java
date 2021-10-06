@@ -6,12 +6,12 @@ enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
-        Game game = Main.gamesMap.getOrDefault(playerId, new Game());
-        if(game.getPlayer() == null) {
+        Game game = Main.gamesMap.get(playerId);
+        if(game == null) {
             Player player = new Player(playerName, playerId);
-            game.setPlayer(player);
-            Main.gamesMap.put(player.getId(), game);
-            return game;
+            Game newGame = new Game(player);
+            Main.gamesMap.put(player.getId(), newGame);
+            return newGame;
         }
         return game;
     }
