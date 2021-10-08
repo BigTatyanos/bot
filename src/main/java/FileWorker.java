@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -7,11 +10,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class FileWorker{
+public class FileWorker {
     public static void loadTestsFromFile() {
 
         File path = new File("./src/main/resources/tests");
-        File [] files = path.listFiles();
+        File[] files = path.listFiles();
         for (File file : Objects.requireNonNull(files)) {
             if (file.isFile()) {
                 List<String> rawData = FileWorker.getRawTests(file);
@@ -30,14 +33,16 @@ public class FileWorker{
     }
 
     public static String getBotToken() {
+        StringBuilder token = new StringBuilder();
         File fileName = new File("./src/main/resources/config.txt");
-
-        try {
-            return Files.lines(Paths.get(fileName.getAbsolutePath())).collect(Collectors.joining());
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null)
+                token.append(line);
         } catch (IOException e) {
-            e.printStackTrace();
+            String message = "Невозможно запустить бота, так как отсутствует конфигурационный файл";
+            System.out.println(message);
         }
-        return null;
+        return token.toString();
     }
-
 }
