@@ -26,14 +26,14 @@ public class Main {
             switch (playerName) {
                 case "Vova": {
                     Game newGame = new Game(new Player(playerName, "123"));
-                    newGame.noteHero(new Hero("Гарри? Гермиона? Рон?", "Гарри Поттер", "HP description"));
+                    newGame.noteHero(new Hero("Гарри Поттер", "HP description"));
                     gamesMap.put(newGame.getPlayer().getId(), newGame);
                     game = newGame;
                     break;
                 }
                 case "Masha": {
                     Game newGame = new Game(new Player(playerName, "987"));
-                    newGame.noteHero(new Hero("Кто ты из губки Боба", "Спанч Боб", "SB description"));
+                    newGame.noteHero(new Hero("Спанч Боб", "SB description"));
                     gamesMap.put(newGame.getPlayer().getId(), newGame);
                     game = newGame;
                     break;

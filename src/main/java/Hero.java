@@ -3,18 +3,13 @@ class Hero {
     private String name;
     private String description;
 
-    Hero(String testName, String name, String description) {
-        this.testName = testName;
+    Hero(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     String getName() {
         return this.name;
-    }
-
-    String getTestName() {
-        return this.testName;
     }
 
     String getDescription() {

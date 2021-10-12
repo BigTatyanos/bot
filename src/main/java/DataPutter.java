@@ -13,7 +13,7 @@ public class DataPutter {
         String[] heroes = data.get(1).split("[|]");
 
         Map<String, Hero> resultHeroes;
-        resultHeroes = Arrays.stream(heroes).collect(Collectors.toMap(hero -> hero, hero -> new Hero(testName, hero, hero + " description")));
+        resultHeroes = Arrays.stream(heroes).collect(Collectors.toMap(hero -> hero, hero -> new Hero(hero, hero + " description")));
 
         List<Question> questions = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
