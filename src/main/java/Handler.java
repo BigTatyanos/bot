@@ -91,17 +91,16 @@ public class Handler {
     }
 
     private static GameAnswer sendQuestion(Game game) {
+        if (game.checkEndTest() && game.getCurrentTest().getCurrentQuestion() == null)
+            return endTest(game);
         List<String> text = new ArrayList<>();
         GameAnswer answer = new GameAnswer();
-        if (!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
-            Question quest = game.getCurrentTest().getCurrentQuestion();
-            text.add(quest.getQuestion());
-            List<String> buttonText = new ArrayList<>(quest.getAnswers());
-            answer.text = text;
-            answer.buttonText = buttonText;
-            return answer;
-        }
-        return endTest(game);
+        Question quest = game.getCurrentTest().getCurrentQuestion();
+        text.add(quest.getQuestion());
+        List<String> buttonText = new ArrayList<>(quest.getAnswers());
+        answer.text = text;
+        answer.buttonText = buttonText;
+        return answer;
     }
 
     private static Answer checkAnswer(String userInput, Game game) {
