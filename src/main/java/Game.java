@@ -8,10 +8,18 @@ class Game {
     private Test currentTest;
     private boolean isNextQuestion;
 
+    private static Map<String, Test> basicTests = new HashMap<>();
+
+    private Game() {
+        if (basicTests.isEmpty()) {
+            FileWorker.loadTestsFromFile();
+            basicTests = DataPutter.getDownloadedTests();
+        }
+    }
+
     Game(Player player) {
+        new Game();
         this.player = player;
-        FileWorker.loadTestsFromFile();
-        Map<String, Test> basicTests = DataPutter.getDownloadedTests();
         tests = new HashMap<>();
         tests.putAll(basicTests);
         isNextQuestion = true;

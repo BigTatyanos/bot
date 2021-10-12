@@ -6,7 +6,7 @@ enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
-        Main.gamesMap.putIfAbsent(playerId, new Game(new Player(playerName, playerId)));
+        Main.gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
         return Main.gamesMap.get(playerId);
     }
 
