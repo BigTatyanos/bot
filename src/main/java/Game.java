@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 class Game {
     private Map<String, Test> tests;
@@ -33,8 +34,8 @@ class Game {
         return currentTest.getQuestions().isEmpty();
     }
 
-    Set<String> getTestsNames() {
-        return tests.keySet();
+    List<String> getTestsNames() {
+        return new ArrayList<>(tests.keySet());
     }
 
     Player getPlayer() {

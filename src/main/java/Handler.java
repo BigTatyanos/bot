@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-enum Answer { NEXT_QUESTION, NO_SUCH_ANSWER}
+enum Answer {NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
     public static Game getGame(String playerName, String playerId) {
@@ -21,64 +23,77 @@ public class Handler {
     }
 
     public static GameAnswer getInput(String userInput, Game game) {
-        List<String> text = new ArrayList<>();
-        List<String> buttonText = new ArrayList<>();
-        GameAnswer answer = new GameAnswer();
-        if(game.getCurrentTest() != null) {
-            if(game.getCurrentTest().getCurrentQuestion() != null) {
+        if (game.getCurrentTest() != null) {
+            if (game.getCurrentTest().getCurrentQuestion() != null) {
                 Answer checkAnswerResult = checkAnswer(userInput, game);
-                if(checkAnswerResult != null) {
+                if (checkAnswerResult != null) {
                     if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
-                        GameAnswer returnedAnswer = sendQuestion(game);
-                        text.addAll(returnedAnswer.text);
-                        buttonText.addAll(returnedAnswer.buttonText);
+                        GameAnswer answer = sendQuestion(game);
                         game.changeIsNextQ();
+                        return answer;
+                    }
+                } else return endTest(game);
+            }
+        } else {
+            switch (userInput) {
+                case "/help": {
+                    GameAnswer answer = new GameAnswer();
+                    answer.hasKeyBoard = false;
+                    answer.text = getHelp();
+                    return answer;
+                }
+
+                case "/start": {
+                    GameAnswer answer = new GameAnswer();
+                    answer.text = Arrays.asList("Какой тест хочешь пройти? Вот список тестов:");
+                    answer.buttonText = game.getTestsNames();
+                    return answer;
+                }
+
+                case "/exit": {
+                    GameAnswer answer = new GameAnswer();
+                    answer.hasKeyBoard = false;
+                    answer.text = Arrays.asList("Пока, до скорой встречи!");
+                    return answer;
+                }
+
+                case "/heroes": {
+                    GameAnswer answer = new GameAnswer();
+                    answer.hasKeyBoard = false;
+                    Set<Hero> heroes = game.getPlayer().getHeroes();
+                    if (heroes.isEmpty()) {
+                        answer.text = Arrays.asList("Ты ещё не прошёл ни одного теста");
+                        return answer;
+                    } else {
+                        answer.text = heroes.stream()
+                                .map(Hero::getName)
+                                .collect(Collectors.toList());
+                        return answer;
                     }
                 }
-                else return endTest(game);
-            }
-        }
-        else {
-            if (userInput.equals("/help")) {
-                answer.hasKeyBoard = false;
-                text.addAll(getHelp());
-            } else if (userInput.equals("/start")) {
-                text.add("Какой тест хочешь пройти? Вот список тестов:");
-                buttonText.addAll(game.getTestsNames());
-            } else if (userInput.equals("/exit")) {
-                answer.hasKeyBoard = false;
-                text.add("Пока, до скорой встречи!");
-            } else if (userInput.equals("/heroes")) {
-                Set<Hero> heroes = game.getPlayer().getHeroes();
-                answer.hasKeyBoard = false;
-                if (heroes.isEmpty()) {
-                    text.add("Ты ещё не прошёл ни одного теста");
-                } else {
-                    for (Hero hero : heroes) {
-                        text.add(hero.getName());
+
+                default: {
+                    if (game.getTestsNames().contains(userInput)) {
+                        game.setCurrentTest(game.findTest(userInput));
+                        Test currentTest = game.getCurrentTest();
+                        currentTest.setCurrentQuestion(currentTest.getQuestion());
+                        return sendQuestion(game);
+                    } else {
+                        GameAnswer answer = new GameAnswer();
+                        answer.hasKeyBoard = false;
+                        answer.text = Arrays.asList("Некорректная строка");
+                        return answer;
                     }
                 }
-            } else if (game.getTestsNames().contains(userInput)) {
-                game.setCurrentTest(game.findTest(userInput));
-                Test currentTest = game.getCurrentTest();
-                currentTest.setCurrentQuestion(currentTest.getQuestion());
-                GameAnswer returnedAnswer = sendQuestion(game);
-                text.addAll(returnedAnswer.text);
-                buttonText.addAll(returnedAnswer.buttonText);
-            } else {
-                answer.hasKeyBoard = false;
-                text.add("Некорректная строка");
             }
         }
-        answer.text = text;
-        answer.buttonText = buttonText;
-        return answer;
+        return null;
     }
 
     private static GameAnswer sendQuestion(Game game) {
         List<String> text = new ArrayList<>();
         GameAnswer answer = new GameAnswer();
-        if(!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
+        if (!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
             Question quest = game.getCurrentTest().getCurrentQuestion();
             text.add(quest.getQuestion());
             List<String> buttonText = new ArrayList<>(quest.getAnswers());
@@ -90,7 +105,7 @@ public class Handler {
     }
 
     private static Answer checkAnswer(String userInput, Game game) {
-        if(!game.checkEndTest()) {
+        if (!game.checkEndTest()) {
             Question quest = game.getCurrentTest().getCurrentQuestion();
             if (quest.checkValidAnswer(userInput)) {
                 quest.getHeroFromAnswer(userInput);
@@ -100,8 +115,7 @@ public class Handler {
                 return Answer.NEXT_QUESTION;
             }
             return Answer.NO_SUCH_ANSWER;
-        }
-        else return null;
+        } else return null;
     }
 
     private static GameAnswer endTest(Game game) {
