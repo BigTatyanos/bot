@@ -49,7 +49,7 @@ public class Main {
                 TelegramAnswer answer = Handler.getInput(userInput, game);
                 if (answer.text != null && !answer.text.isEmpty()) {
                     answer.text.forEach(ConsoleCommunication::printText);
-                    if (answer.text.get(0).equals("Пока, до скорой встречи!"))
+                    if (answer.gameFinished())
                         break;
                 }
                 if (answer.buttonText != null)
