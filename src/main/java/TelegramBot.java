@@ -9,7 +9,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TelegramBot extends TelegramLongPollingBot {
 
@@ -29,7 +28,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String playerId = TelegramCommunication.getPlayerId(rMessage);
         String playerName = TelegramCommunication.getPlayerName(rMessage);
 
-        TelegramAnswer answer;
+        GameAnswer answer;
         Game game;
         game = Handler.getGame(playerName, playerId);
         answer = Handler.getInput(rMessage.getText(), game);

@@ -20,16 +20,16 @@ public class Handler {
         return text;
     }
 
-    public static TelegramAnswer getInput(String userInput, Game game) {
+    public static GameAnswer getInput(String userInput, Game game) {
         List<String> text = new ArrayList<>();
         List<String> buttonText = new ArrayList<>();
-        TelegramAnswer answer = new TelegramAnswer();
+        GameAnswer answer = new GameAnswer();
         if(game.getCurrentTest() != null) {
             if(game.getCurrentTest().getCurrentQuestion() != null) {
                 Answer checkAnswerResult = checkAnswer(userInput, game);
                 if(checkAnswerResult != null) {
                     if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
-                        TelegramAnswer returnedAnswer = sendQuestion(game);
+                        GameAnswer returnedAnswer = sendQuestion(game);
                         text.addAll(returnedAnswer.text);
                         buttonText.addAll(returnedAnswer.buttonText);
                         game.changeIsNextQ();
@@ -62,7 +62,7 @@ public class Handler {
                 game.setCurrentTest(game.findTest(userInput));
                 Test currentTest = game.getCurrentTest();
                 currentTest.setCurrentQuestion(currentTest.getQuestion());
-                TelegramAnswer returnedAnswer = sendQuestion(game);
+                GameAnswer returnedAnswer = sendQuestion(game);
                 text.addAll(returnedAnswer.text);
                 buttonText.addAll(returnedAnswer.buttonText);
             } else {
@@ -75,9 +75,9 @@ public class Handler {
         return answer;
     }
 
-    private static TelegramAnswer sendQuestion(Game game) {
+    private static GameAnswer sendQuestion(Game game) {
         List<String> text = new ArrayList<>();
-        TelegramAnswer answer = new TelegramAnswer();
+        GameAnswer answer = new GameAnswer();
         if(!game.checkEndTest() || game.getCurrentTest().getCurrentQuestion() != null) {
             Question quest = game.getCurrentTest().getCurrentQuestion();
             text.add(quest.getQuestion());
@@ -104,8 +104,8 @@ public class Handler {
         else return null;
     }
 
-    private static TelegramAnswer endTest(Game game) {
-        TelegramAnswer answer = new TelegramAnswer();
+    private static GameAnswer endTest(Game game) {
+        GameAnswer answer = new GameAnswer();
         ArrayList<String> text = new ArrayList<>();
         if (game.checkEndTest()) {
             answer.hasKeyBoard = false;

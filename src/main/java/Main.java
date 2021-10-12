@@ -46,7 +46,7 @@ public class Main {
 
             while (true) {
                 String userInput = cc.getUserInput();
-                TelegramAnswer answer = Handler.getInput(userInput, game);
+                GameAnswer answer = Handler.getInput(userInput, game);
                 if (answer.text != null && !answer.text.isEmpty()) {
                     answer.text.forEach(ConsoleCommunication::printText);
                     if (answer.gameFinished())
