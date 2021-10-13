@@ -11,19 +11,22 @@ import java.util.stream.Collectors;
 
 
 public class FileWorker {
-    public static void loadTestsFromFile() {
+    public static List<List<String>> loadTestsFromFile() {
 
         File path = new File("./src/main/resources/tests");
         File[] files = path.listFiles();
+        List<List<String>> result = new ArrayList<>();
         for (File file : Objects.requireNonNull(files)) {
             if (file.isFile()) {
                 List<String> rawData = FileWorker.getRawTests(file);
-                DataPutter.addData(rawData);
+                result.add(rawData);
             }
         }
+
+        return result;
     }
 
-    public static List<String> getRawTests(File fileName) {
+    private static List<String> getRawTests(File fileName) {
         try {
             return Files.lines(Paths.get(fileName.getAbsolutePath())).collect(Collectors.toList());
         } catch (IOException e) {

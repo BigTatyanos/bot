@@ -13,8 +13,8 @@ class Game {
 
     private Game() {
         if (basicTests.isEmpty()) {
-            FileWorker.loadTestsFromFile();
-            basicTests = DataPutter.getDownloadedTests();
+            TestMaker.makeTests(FileWorker.loadTestsFromFile());
+            basicTests = TestMaker.getMadeTests();
         }
     }
 
