@@ -14,6 +14,16 @@ public class Test {
         this.usedQuestions = new ArrayList<>();
     }
 
+    public Test clone() {
+        return new Test(name, getCopyOfQuestions());
+    }
+
+    private List<Question> getCopyOfQuestions() {
+        List<Question> copy = new ArrayList<>();
+        this.questions.forEach(x -> copy.add(x.clone()));
+        return copy;
+    }
+
     public List<Question> getQuestions() {
         return questions;
     }

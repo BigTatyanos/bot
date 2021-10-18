@@ -21,9 +21,14 @@ class Game {
     Game(Player player) {
         new Game();
         this.player = player;
-        tests = new HashMap<>();
-        tests.putAll(basicTests);
+        tests = getCopyOfTests();
         isNextQuestion = true;
+    }
+
+    private static Map<String, Test> getCopyOfTests() {
+        Map<String, Test> result = new HashMap<>();
+        basicTests.forEach((key, value) -> result.put(key, value.clone()));
+        return result;
     }
 
     void noteHero(Hero hero) {
