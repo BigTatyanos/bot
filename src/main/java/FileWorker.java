@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,16 +34,13 @@ public class FileWorker {
     }
 
     public static String getBotToken() {
-        StringBuilder token = new StringBuilder();
         File fileName = new File("./src/main/resources/config.txt");
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null)
-                token.append(line);
+        try {
+            return Files.lines(Paths.get(fileName.getAbsolutePath())).collect(Collectors.joining());
         } catch (IOException e) {
             String message = "Невозможно запустить бота, так как отсутствует конфигурационный файл";
             System.out.println(message);
         }
-        return token.toString();
+        return null;
     }
 }
