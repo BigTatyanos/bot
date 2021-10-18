@@ -7,11 +7,6 @@ import java.util.stream.Collectors;
 enum Answer {NEXT_QUESTION, NO_SUCH_ANSWER}
 
 public class Handler {
-    public static Game getGame(String playerName, String playerId) {
-        Main.gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
-        return Main.gamesMap.get(playerId);
-    }
-
     public static List<String> getHelp() {
         List<String> text = new ArrayList<>();
         text.add("Введи /start, чтобы начать игру");

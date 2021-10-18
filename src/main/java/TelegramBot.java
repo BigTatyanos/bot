@@ -30,7 +30,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         GameAnswer answer;
         Game game;
-        game = Handler.getGame(playerName, playerId);
+        game = Main.getGame(playerName, playerId);
         answer = Handler.getInput(rMessage.getText(), game);
 
         SendMessage sendMessage = new SendMessage();
