@@ -70,4 +70,7 @@ public class Test {
         currentQuestion = quest;
     }
 
+    public String getTestName() {
+        return name;
+    }
 }

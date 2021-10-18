@@ -1,13 +1,18 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
 
 class Game {
     private static Map<String, Test> basicTests;
 
     static {
-        TestMaker.makeTests(FileWorker.loadTestsFromFile());
-        basicTests = TestMaker.getMadeTests();
+        basicTests = FileWorker.loadTestsFromFile()
+                .stream()
+                .map(TestMaker::makeTest)
+                .collect(toMap(Test::getTestName, Function.identity()));
     }
 
     private Map<String, Test> tests;

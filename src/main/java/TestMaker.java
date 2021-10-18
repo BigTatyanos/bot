@@ -4,14 +4,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class TestMaker {
-
-    private static Map<String, Test> madeTests = new HashMap<>();
-
-    private static List<List<String>> downloadedTests;
-
-    public static void makeTest(int index) {
-
-        List<String> data = downloadedTests.get(index);
+    public static Test makeTest(List<String> data) {
         String testName = data.get(0);
         String[] heroes = data.get(1).split("[|]");
 
@@ -48,25 +41,15 @@ public class TestMaker {
             Hero hero = resultHeroes.get(heroName);
             hero.setDescription(description);
         }
-        madeTests.put(testName, new Test(testName, questions));
+        return new Test(testName, questions);
     }
 
     private static String getRegExp(int n) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(.*\\?)");
 
-        for(int i=0;i<n;i++)
+        for (int i = 0; i < n; i++)
             stringBuilder.append("\\|((.*)\\((.*)\\))");
-        return  stringBuilder.toString();
-    }
-
-    public static Map<String, Test> getMadeTests() {
-        return madeTests;
-    }
-
-    public static void makeTests(List<List<String>> loadTests) {
-        downloadedTests = loadTests;
-        for (int i = 0; i < downloadedTests.size(); i++)
-            makeTest(i);
+        return stringBuilder.toString();
     }
 }
