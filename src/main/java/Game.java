@@ -4,22 +4,19 @@ import java.util.List;
 import java.util.Map;
 
 class Game {
+    private static Map<String, Test> basicTests;
+
+    static {
+        TestMaker.makeTests(FileWorker.loadTestsFromFile());
+        basicTests = TestMaker.getMadeTests();
+    }
+
     private Map<String, Test> tests;
     private Player player;
     private Test currentTest;
     private boolean isNextQuestion;
 
-    private static Map<String, Test> basicTests = new HashMap<>();
-
-    private Game() {
-        if (basicTests.isEmpty()) {
-            TestMaker.makeTests(FileWorker.loadTestsFromFile());
-            basicTests = TestMaker.getMadeTests();
-        }
-    }
-
     Game(Player player) {
-        new Game();
         this.player = player;
         tests = getCopyOfTests();
         isNextQuestion = true;
