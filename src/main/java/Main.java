@@ -7,8 +7,7 @@ public class Main {
     static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
 
     public static Game getGame(String playerName, String playerId) {
-        gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
-        return gamesMap.get(playerId);
+        return gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
     }
 
     public static void main(String[] args) {

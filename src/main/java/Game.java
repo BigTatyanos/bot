@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ class Game {
     }
 
     List<String> getTestsNames() {
-        return new ArrayList<>(tests.keySet());
+        return List.copyOf(tests.keySet());
     }
 
     Player getPlayer() {

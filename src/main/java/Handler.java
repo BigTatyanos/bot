@@ -92,7 +92,7 @@ public class Handler {
         GameAnswer answer = new GameAnswer();
         Question quest = game.getCurrentTest().getCurrentQuestion();
         text.add(quest.getQuestion());
-        List<String> buttonText = new ArrayList<>(quest.getAnswers());
+        List<String> buttonText = List.copyOf(quest.getAnswers());
         answer.text = text;
         answer.buttonText = buttonText;
         return answer;
