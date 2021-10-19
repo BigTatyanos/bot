@@ -49,6 +49,7 @@ public class Handler {
                     GameAnswer answer = new GameAnswer();
                     answer.hasKeyBoard = false;
                     answer.text = Arrays.asList("Пока, до скорой встречи!");
+                    answer.gameFinished = true;
                     return answer;
                 }
 

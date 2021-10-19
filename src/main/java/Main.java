@@ -2,9 +2,11 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.util.Objects;
+
 public class Main {
 
-    static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
+    private static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
 
     public static Game getGame(String playerName, String playerId) {
         return gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
@@ -51,9 +53,9 @@ public class Main {
             while (true) {
                 String userInput = cc.getUserInput();
                 GameAnswer answer = Handler.getInput(userInput, game);
-                if (answer.text != null && !answer.text.isEmpty()) {
+                if (Objects.requireNonNull(answer).text != null && !answer.text.isEmpty()) {
                     answer.text.forEach(ConsoleCommunication::printText);
-                    if (answer.gameFinished())
+                    if (answer.gameFinished)
                         break;
                 }
                 if (answer.buttonText != null)
