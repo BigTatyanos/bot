@@ -18,12 +18,18 @@ public class Handler {
     }
 
     public static GameAnswer getInput(String userInput, Game game) {
-        if (game.getCurrentTest() != null) {
-            if (game.getCurrentTest().getCurrentQuestion() != null) {
+        Test currentTest = game.getCurrentTest();
+        if (currentTest != null) {
+            Question currentQuestion = currentTest.getCurrentQuestion();
+            if (currentQuestion != null) {
                 Answer checkAnswerResult = checkAnswer(userInput, game);
                 if (checkAnswerResult != null) {
                     if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
-                        return sendQuestion(game);
+                        if (game.checkEndTest())
+                            return endTest(game);
+                        Question nextQuestion = currentTest.getQuestion();
+                        currentTest.setCurrentQuestion(nextQuestion);
+                        return sendQuestion(nextQuestion);
                     }
                 } else return endTest(game);
             }
@@ -69,9 +75,10 @@ public class Handler {
                 default: {
                     if (game.getTestsNames().contains(userInput)) {
                         game.setCurrentTest(game.findTest(userInput));
-                        Test currentTest = game.getCurrentTest();
-                        currentTest.setCurrentQuestion(currentTest.getQuestion());
-                        return sendQuestion(game);
+                        currentTest = game.getCurrentTest();
+                        Question firstQuestion = currentTest.getQuestion();
+                        currentTest.setCurrentQuestion(firstQuestion);
+                        return sendQuestion(firstQuestion);
                     } else {
                         GameAnswer answer = new GameAnswer();
                         answer.hasKeyBoard = false;
@@ -84,44 +91,36 @@ public class Handler {
         return new GameAnswer();
     }
 
-    private static GameAnswer sendQuestion(Game game) {
-        if (game.checkEndTest() && game.getCurrentTest().getCurrentQuestion() == null)
-            return endTest(game);
+    private static GameAnswer sendQuestion(Question question) {
         List<String> text = new ArrayList<>();
         GameAnswer answer = new GameAnswer();
-        Question quest = game.getCurrentTest().getCurrentQuestion();
-        text.add(quest.getQuestion());
-        List<String> buttonText = List.copyOf(quest.getAnswers());
+        text.add(question.getQuestion());
+        List<String> buttonText = List.copyOf(question.getAnswers());
         answer.text = text;
         answer.buttonText = buttonText;
         return answer;
     }
 
     private static Answer checkAnswer(String userInput, Game game) {
-        if (!game.checkEndTest()) {
-            Question quest = game.getCurrentTest().getCurrentQuestion();
-            if (quest.checkValidAnswer(userInput)) {
-                quest.getHeroFromAnswer(userInput);
-                game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
-                game.getCurrentTest().setCurrentQuestion(game.getCurrentTest().getQuestion());
-                return Answer.NEXT_QUESTION;
-            }
-            return Answer.NO_SUCH_ANSWER;
-        } else return null;
+        Question quest = game.getCurrentTest().getCurrentQuestion();
+        if (quest.checkValidAnswer(userInput)) {
+            quest.getHeroFromAnswer(userInput);
+            game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
+            return Answer.NEXT_QUESTION;
+        }
+        return Answer.NO_SUCH_ANSWER;
     }
 
     private static GameAnswer endTest(Game game) {
         GameAnswer answer = new GameAnswer();
         ArrayList<String> text = new ArrayList<>();
-        if (game.checkEndTest()) {
-            answer.hasKeyBoard = false;
-            Hero resHero = game.getCurrentTest().getResult();
-            text.add(resHero.getName());
-            text.add(resHero.getDescription());
-            game.noteHero(resHero);
-            game.getCurrentTest().dropResultsTest();
-            game.setCurrentTest(null);
-        }
+        answer.hasKeyBoard = false;
+        Hero resHero = game.getCurrentTest().getResult();
+        text.add(resHero.getName());
+        text.add(resHero.getDescription());
+        game.noteHero(resHero);
+        game.getCurrentTest().dropResultsTest();
+        game.setCurrentTest(null);
 
         answer.text = text;
         return answer;
