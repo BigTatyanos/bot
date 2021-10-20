@@ -2,8 +2,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.Objects;
-
 public class Main {
 
     private static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
@@ -53,13 +51,15 @@ public class Main {
             while (true) {
                 String userInput = cc.getUserInput();
                 GameAnswer answer = Handler.getInput(userInput, game);
-                if (Objects.requireNonNull(answer).text != null && !answer.text.isEmpty()) {
-                    answer.text.forEach(ConsoleCommunication::printText);
-                    if (answer.gameFinished)
-                        break;
-                }
-                if (answer.buttonText != null)
-                    answer.buttonText.forEach(ConsoleCommunication::printText);
+                if (answer != null) {
+                    if (answer.text != null && !answer.text.isEmpty()) {
+                        answer.text.forEach(ConsoleCommunication::printText);
+                        if (answer.gameFinished)
+                            break;
+                    }
+                    if (answer.buttonText != null)
+                        answer.buttonText.forEach(ConsoleCommunication::printText);
+                } else ConsoleCommunication.printText(GameAnswer.errorMessage);
             }
         }
         cc.closeScanner();

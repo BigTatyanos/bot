@@ -32,24 +32,26 @@ public class TelegramBot extends TelegramLongPollingBot {
         GameAnswer answer = Handler.getInput(rMessage.getText(), game);
 
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(String.join("\n", answer.text));
-        if (!answer.hasKeyBoard)
-            sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true, false));
-        else {
-            ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-            replyKeyboardMarkup.setSelective(true);
-            replyKeyboardMarkup.setResizeKeyboard(true);
-            replyKeyboardMarkup.setOneTimeKeyboard(true);
-            sendMessage.enableMarkdown(true);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            for (int i = 0; i < answer.buttonText.size(); i++) {
-                KeyboardRow kRow = new KeyboardRow();
-                kRow.add(answer.buttonText.get(i));
-                keyboard.add(kRow);
+        if (answer != null) {
+            sendMessage.setText(String.join("\n", answer.text));
+            if (!answer.hasKeyBoard)
+                sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true, false));
+            else {
+                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+                replyKeyboardMarkup.setSelective(true);
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(true);
+                sendMessage.enableMarkdown(true);
+                sendMessage.setReplyMarkup(replyKeyboardMarkup);
+                List<KeyboardRow> keyboard = new ArrayList<>();
+                for (int i = 0; i < answer.buttonText.size(); i++) {
+                    KeyboardRow kRow = new KeyboardRow();
+                    kRow.add(answer.buttonText.get(i));
+                    keyboard.add(kRow);
+                }
+                replyKeyboardMarkup.setKeyboard(keyboard);
             }
-            replyKeyboardMarkup.setKeyboard(keyboard);
-        }
+        } else sendMessage.setText(GameAnswer.errorMessage);
         sendMessage.setChatId(playerId);
 
         try {

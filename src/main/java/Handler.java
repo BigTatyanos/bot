@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-enum Answer {NEXT_QUESTION, NO_SUCH_ANSWER}
-
 public class Handler {
     public static List<String> getHelp() {
         List<String> text = new ArrayList<>();
@@ -20,18 +18,12 @@ public class Handler {
     public static GameAnswer getInput(String userInput, Game game) {
         Test currentTest = game.getCurrentTest();
         if (currentTest != null) {
-            Question currentQuestion = currentTest.getCurrentQuestion();
-            if (currentQuestion != null) {
-                Answer checkAnswerResult = checkAnswer(userInput, game);
-                if (checkAnswerResult != null) {
-                    if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
-                        if (game.checkEndTest())
-                            return endTest(game);
-                        Question nextQuestion = currentTest.getQuestion();
-                        currentTest.setCurrentQuestion(nextQuestion);
-                        return sendQuestion(nextQuestion);
-                    }
-                } else return endTest(game);
+            if (isValidInput(userInput, game)) {
+                if (game.checkEndTest())
+                    return endTest(game);
+                Question nextQuestion = currentTest.getQuestion();
+                currentTest.setCurrentQuestion(nextQuestion);
+                return sendQuestion(nextQuestion);
             }
         } else {
             switch (userInput) {
@@ -88,7 +80,7 @@ public class Handler {
                 }
             }
         }
-        return new GameAnswer();
+        return null;
     }
 
     private static GameAnswer sendQuestion(Question question) {
@@ -101,14 +93,14 @@ public class Handler {
         return answer;
     }
 
-    private static Answer checkAnswer(String userInput, Game game) {
+    private static boolean isValidInput(String userInput, Game game) {
         Question quest = game.getCurrentTest().getCurrentQuestion();
         if (quest.checkValidAnswer(userInput)) {
             quest.getHeroFromAnswer(userInput);
             game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
-            return Answer.NEXT_QUESTION;
+            return true;
         }
-        return Answer.NO_SUCH_ANSWER;
+        return false;
     }
 
     private static GameAnswer endTest(Game game) {
