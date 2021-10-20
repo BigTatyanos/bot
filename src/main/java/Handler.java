@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Handler {
@@ -38,7 +35,7 @@ public class Handler {
 
                 case "/start": {
                     GameAnswer answer = new GameAnswer();
-                    answer.text = Arrays.asList("Какой тест хочешь пройти? Вот список тестов:");
+                    answer.text = Collections.singletonList("Какой тест хочешь пройти? Вот список тестов:");
                     answer.buttonText = game.getTestsNames();
                     return answer;
                 }
@@ -46,7 +43,7 @@ public class Handler {
                 case "/exit": {
                     GameAnswer answer = new GameAnswer();
                     answer.hasKeyBoard = false;
-                    answer.text = Arrays.asList("Пока, до скорой встречи!");
+                    answer.text = Collections.singletonList("Пока, до скорой встречи!");
                     answer.gameFinished = true;
                     return answer;
                 }
@@ -56,7 +53,7 @@ public class Handler {
                     answer.hasKeyBoard = false;
                     Set<Hero> heroes = game.getPlayer().getHeroes();
                     if (heroes.isEmpty()) {
-                        answer.text = Arrays.asList("Ты ещё не прошёл ни одного теста");
+                        answer.text = Collections.singletonList("Ты ещё не прошёл ни одного теста");
                         return answer;
                     } else {
                         answer.text = heroes.stream()
@@ -76,7 +73,7 @@ public class Handler {
                     } else {
                         GameAnswer answer = new GameAnswer();
                         answer.hasKeyBoard = false;
-                        answer.text = Arrays.asList("Некорректная строка");
+                        answer.text = Collections.singletonList("Некорректная строка");
                         return answer;
                     }
                 }
