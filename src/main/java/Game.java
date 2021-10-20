@@ -18,12 +18,10 @@ class Game {
     private Map<String, Test> tests;
     private Player player;
     private Test currentTest;
-    private boolean isNextQuestion;
 
     Game(Player player) {
         this.player = player;
         tests = getCopyOfTests();
-        isNextQuestion = true;
     }
 
     private static Map<String, Test> getCopyOfTests() {
@@ -54,10 +52,6 @@ class Game {
 
     void setCurrentTest(Test test) {
         this.currentTest = test;
-    }
-
-    void changeIsNextQ() {
-        this.isNextQuestion = !this.isNextQuestion;
     }
 
     Test findTest(String name) {

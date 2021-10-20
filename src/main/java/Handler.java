@@ -23,9 +23,7 @@ public class Handler {
                 Answer checkAnswerResult = checkAnswer(userInput, game);
                 if (checkAnswerResult != null) {
                     if (checkAnswerResult.equals(Answer.NEXT_QUESTION)) {
-                        GameAnswer answer = sendQuestion(game);
-                        game.changeIsNextQ();
-                        return answer;
+                        return sendQuestion(game);
                     }
                 } else return endTest(game);
             }
@@ -83,7 +81,7 @@ public class Handler {
                 }
             }
         }
-        return null;
+        return new GameAnswer();
     }
 
     private static GameAnswer sendQuestion(Game game) {
@@ -105,7 +103,6 @@ public class Handler {
             if (quest.checkValidAnswer(userInput)) {
                 quest.getHeroFromAnswer(userInput);
                 game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
-                game.changeIsNextQ();
                 game.getCurrentTest().setCurrentQuestion(game.getCurrentTest().getQuestion());
                 return Answer.NEXT_QUESTION;
             }

@@ -28,10 +28,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         String playerId = TelegramCommunication.getPlayerId(rMessage);
         String playerName = TelegramCommunication.getPlayerName(rMessage);
 
-        GameAnswer answer;
-        Game game;
-        game = Main.getGame(playerName, playerId);
-        answer = Handler.getInput(rMessage.getText(), game);
+        Game game = Main.getGame(playerName, playerId);
+        GameAnswer answer = Handler.getInput(rMessage.getText(), game);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(String.join("\n", answer.text));
@@ -55,7 +53,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage.setChatId(playerId);
 
         try {
-            if(!sendMessage.getText().isEmpty())
+            if (!sendMessage.getText().isEmpty())
                 execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
