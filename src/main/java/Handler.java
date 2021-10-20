@@ -18,9 +18,11 @@ public class Handler {
     public static GameAnswer getInput(String userInput, Game game) {
         Test currentTest = game.getCurrentTest();
         if (currentTest != null) {
-            if (isValidInput(userInput, game)) {
+            Question currentQuestion = currentTest.getCurrentQuestion();
+            if (currentQuestion.checkValidAnswer(userInput)) {
                 if (game.checkEndTest())
                     return endTest(game);
+                currentTest.enterProgress(currentQuestion.getHeroFromAnswer(userInput));
                 Question nextQuestion = currentTest.getQuestion();
                 currentTest.setCurrentQuestion(nextQuestion);
                 return sendQuestion(nextQuestion);
@@ -91,16 +93,6 @@ public class Handler {
         answer.text = text;
         answer.buttonText = buttonText;
         return answer;
-    }
-
-    private static boolean isValidInput(String userInput, Game game) {
-        Question quest = game.getCurrentTest().getCurrentQuestion();
-        if (quest.checkValidAnswer(userInput)) {
-            quest.getHeroFromAnswer(userInput);
-            game.getCurrentTest().enterProgress(quest.getHeroFromAnswer(userInput));
-            return true;
-        }
-        return false;
     }
 
     private static GameAnswer endTest(Game game) {
