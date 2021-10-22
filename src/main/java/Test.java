@@ -43,17 +43,10 @@ public class Test {
     }
 
     public Hero getResult() {
-        Integer maxRes = Collections.max(progress.values());
-
-        for (Hero hero : progress.keySet()) {
-            Integer obj = progress.get(hero);
-            if (hero != null) {
-                if (maxRes.equals(obj)) {
-                    return hero;
-                }
-            }
-        }
-        return null;
+        return progress.entrySet()
+                .stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .get().getKey();
     }
 
     public void dropResultsTest() {

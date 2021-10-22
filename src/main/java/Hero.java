@@ -1,5 +1,4 @@
 class Hero {
-    private String testName;
     private String name;
     private String description;
 
