@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Handler {
@@ -13,16 +16,13 @@ public class Handler {
     }
 
     public static GameAnswer getInput(String userInput, Game game) {
-        Test currentTest = game.getCurrentTest();
-        if (currentTest != null) {
-            Question currentQuestion = currentTest.getCurrentQuestion();
-            if (currentQuestion.checkValidAnswer(userInput)) {
-                currentTest.enterProgress(currentQuestion.getHeroFromAnswer(userInput));
-                if (game.checkEndTest())
-                    return endTest(game);
-                Question nextQuestion = currentTest.getQuestion();
-                currentTest.setCurrentQuestion(nextQuestion);
-                return sendQuestion(nextQuestion);
+        TestProgress testProgress = game.getTestProgress();
+        if (testProgress != null) {
+            if (testProgress.isValidInput(userInput)) {
+                Question nextQuestion = testProgress.getCurrentQuestion();
+                if (nextQuestion != null)
+                    return sendQuestion(nextQuestion);
+                else return endTest(game);
             }
         } else {
             switch (userInput) {
@@ -66,9 +66,7 @@ public class Handler {
                 default: {
                     if (game.getTestsNames().contains(userInput)) {
                         game.setCurrentTest(game.findTest(userInput));
-                        currentTest = game.getCurrentTest();
-                        Question firstQuestion = currentTest.getQuestion();
-                        currentTest.setCurrentQuestion(firstQuestion);
+                        Question firstQuestion = game.getTestProgress().getCurrentQuestion();
                         return sendQuestion(firstQuestion);
                     } else {
                         GameAnswer answer = new GameAnswer();
@@ -96,11 +94,10 @@ public class Handler {
         GameAnswer answer = new GameAnswer();
         ArrayList<String> text = new ArrayList<>();
         answer.hasKeyBoard = false;
-        Hero resHero = game.getCurrentTest().getResult();
+        Hero resHero = game.getTestProgress().getResult();
         text.add(resHero.getName());
         text.add(resHero.getDescription());
         game.noteHero(resHero);
-        game.getCurrentTest().dropResultsTest();
         game.setCurrentTest(null);
 
         answer.text = text;

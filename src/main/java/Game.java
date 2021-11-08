@@ -18,6 +18,7 @@ class Game {
     private Map<String, Test> tests;
     private Player player;
     private Test currentTest;
+    private TestProgress testProgress;
 
     Game(Player player) {
         this.player = player;
@@ -34,10 +35,6 @@ class Game {
         this.player.heroes.put(currentTest, hero);
     }
 
-    boolean checkEndTest() {
-        return currentTest.getQuestions().isEmpty();
-    }
-
     List<String> getTestsNames() {
         return List.copyOf(tests.keySet());
     }
@@ -46,12 +43,18 @@ class Game {
         return player;
     }
 
-    Test getCurrentTest() {
-        return this.currentTest;
+    void setCurrentTest(Test test) {
+        if (test != null) {
+            this.currentTest = test;
+            this.testProgress = new TestProgress(test);
+        } else {
+            this.currentTest = null;
+            this.testProgress = null;
+        }
     }
 
-    void setCurrentTest(Test test) {
-        this.currentTest = test;
+    public TestProgress getTestProgress() {
+        return testProgress;
     }
 
     Test findTest(String name) {
