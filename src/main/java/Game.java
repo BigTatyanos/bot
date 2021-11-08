@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -15,20 +14,14 @@ class Game {
                 .collect(toMap(Test::getTestName, Function.identity()));
     }
 
-    private Map<String, Test> tests;
+    private final Map<String, Test> tests;
     private Player player;
     private Test currentTest;
     private TestProgress testProgress;
 
     Game(Player player) {
         this.player = player;
-        tests = getCopyOfTests();
-    }
-
-    private static Map<String, Test> getCopyOfTests() {
-        Map<String, Test> result = new HashMap<>();
-        basicTests.forEach((key, value) -> result.put(key, value.clone()));
-        return result;
+        tests = basicTests;
     }
 
     void noteHero(Hero hero) {

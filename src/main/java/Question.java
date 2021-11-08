@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,10 +8,6 @@ public class Question {
     public Question(String question, Map<String, Hero> answers) {
         this.question = question;
         this.answers = answers;
-    }
-
-    public Question clone() {
-        return new Question(question, new HashMap<>(answers));
     }
 
     public Hero getHeroFromAnswer(String answer) {
