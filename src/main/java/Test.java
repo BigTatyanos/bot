@@ -25,7 +25,7 @@ public class Test {
     }
 
     public List<Question> getQuestions() {
-        return questions;
+        return Collections.unmodifiableList(questions);
     }
 
     public void enterProgress(Hero hero) {
