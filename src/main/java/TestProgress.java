@@ -25,6 +25,10 @@ public class TestProgress {
         return questions.peek();
     }
 
+    public Test getCurrentTest() {
+        return test;
+    }
+
     public Hero getResult() {
         return progress.entrySet()
                 .stream()

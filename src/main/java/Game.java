@@ -16,7 +16,6 @@ class Game {
 
     private final Map<String, Test> tests;
     private Player player;
-    private Test currentTest;
     private TestProgress testProgress;
 
     Game(Player player) {
@@ -25,7 +24,7 @@ class Game {
     }
 
     void noteHero(Hero hero) {
-        this.player.heroes.put(currentTest, hero);
+        this.player.heroes.put(testProgress.getCurrentTest(), hero);
     }
 
     List<String> getTestsNames() {
@@ -38,10 +37,8 @@ class Game {
 
     void setCurrentTest(Test test) {
         if (test != null) {
-            this.currentTest = test;
             this.testProgress = new TestProgress(test);
         } else {
-            this.currentTest = null;
             this.testProgress = null;
         }
     }
