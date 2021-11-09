@@ -1,59 +1,67 @@
-//package appBot;
-
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
 
-    public static java.util.List<Game> gamesList = new java.util.ArrayList<>();
+    private static java.util.Map<String, Game> gamesMap = new java.util.HashMap<>();
+
+    public static Game getGame(String playerName, String playerId) {
+        return gamesMap.computeIfAbsent(playerId, x -> new Game(new Player(playerName, playerId)));
+    }
+
     public static void main(String[] args) {
 
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new TelegramBot());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        ConsoleCommunication cc = new ConsoleCommunication();
+        cc.printHello();
+        ConsoleCommunication.printText("Запустить telegram версию y/n?");
+        if (cc.getUserInput().equals("y")) {
+            try {
+                TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+                telegramBotsApi.registerBot(new TelegramBot());
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+            String playerName = cc.getPlayerName();
+            String playerId = "001";
+            Player player = new Player(playerName, playerId);
+            Game game;
+            switch (playerName) {
+                case "Vova": {
+                    Game newGame = new Game(new Player(playerName, "123"));
+                    newGame.noteHero(new Hero("Гарри Поттер", "HP description"));
+                    gamesMap.put(newGame.getPlayer().getId(), newGame);
+                    game = newGame;
+                    break;
+                }
+                case "Masha": {
+                    Game newGame = new Game(new Player(playerName, "987"));
+                    newGame.noteHero(new Hero("Спанч Боб", "SB description"));
+                    gamesMap.put(newGame.getPlayer().getId(), newGame);
+                    game = newGame;
+                    break;
+                }
+                default: {
+                    game = getGame(player.getName(), playerId);
+                    break;
+                }
+            }
+
+            while (true) {
+                String userInput = cc.getUserInput();
+                GameAnswer answer = Handler.getInput(userInput, game);
+                if (answer != null) {
+                    if (answer.text != null && !answer.text.isEmpty()) {
+                        answer.text.forEach(ConsoleCommunication::printText);
+                        if (answer.gameFinished)
+                            break;
+                    }
+                    if (answer.buttonText != null)
+                        answer.buttonText.forEach(ConsoleCommunication::printText);
+                } else ConsoleCommunication.printText(GameAnswer.errorMessage);
+            }
         }
-
-
-//        Game game = new Game();
-//
-//        Game game1 = new Game();
-//        Player player1 = new Player("Vova", "123");
-//        game1.setCurrentTest(game.findTest("Кто ты из губки Боба"));
-//        game1.setPlayer(player1);
-//        game1.noteHero(new Hero("Гарри? Гермиона? Рон?", "Гарри Поттер", "HP description"));
-//
-//        Game game2 = new Game();
-//        Player player2 = new Player("Masha", "987");
-//        game2.setCurrentTest(game.findTest("Гарри? Гермиона? Рон?"));
-//        game2.setPlayer(player2);
-//        game2.noteHero(new Hero("Кто ты из губки Боба", "Спанч Боб", "SB description"));
-//        gamesList.add(game1);
-//        gamesList.add(game2);
-//
-//        ConsoleCommunication cc = new ConsoleCommunication();
-//        cc.printHello();
-//        String playerName = cc.getPlayerName();
-//        String playerId = "001";
-//        Player player = new Player(playerName, playerId);
-//        game.setPlayer(player);
-//
-//        if(playerName.equals("Vova"))
-//            playerId = "123";
-//        else if(playerName.equals("Masha"))
-//            playerId = "987";
-//        game = Handler.getGame(player.getName(), playerId);
-//
-//        while(true){
-//            boolean response = cc.HandleUserCommand(game);
-//            if (response)
-//                break;
-//            else if(game.getCurrentTest() != null){
-//                game.playTest(cc);
-//            }
-//        }
-//        cc.closeScanner();
+        cc.closeScanner();
     }
 }

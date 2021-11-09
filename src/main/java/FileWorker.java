@@ -1,71 +1,46 @@
-import java.io.*;
-import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
-public class FileWorker{
-    public static void getTestsFromFile() {
+public class FileWorker {
+    public static List<List<String>> loadTestsFromFile() {
 
         File path = new File("./src/main/resources/tests");
-        File [] files = path.listFiles();
-        for (int i = 0; i < files.length; i++){
-            if (files[i].isFile()){
-                String rawData = FileWorker.getRawTests(files[i]);
-                DataPutter.addData(rawData);
+        File[] files = path.listFiles();
+        List<List<String>> result = new ArrayList<>();
+        for (File file : Objects.requireNonNull(files)) {
+            if (file.isFile()) {
+                List<String> rawData = FileWorker.getRawTests(file);
+                result.add(rawData);
             }
         }
+
+        return result;
     }
 
-    public static String getRawTests(File fileName) {
-        StringBuilder result = new StringBuilder();
-        try
-        {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader reader = new BufferedReader(fr);
-            String line = "";
-            while (line != null)
-            {
-                line = reader.readLine();
-                if (line != null)
-                    result.append(line).append("\n");
-            }
-            reader.close();
-        }
-        catch (FileNotFoundException e)
-        {
-            System.out.println("Exception: File not found");
-        }
-        catch (IOException e)
-        {
+    private static List<String> getRawTests(File fileName) {
+        try {
+            return Files.lines(Paths.get(fileName.getAbsolutePath())).collect(Collectors.toList());
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return result.toString();
+        return new ArrayList<>();
     }
 
     public static String getBotToken() {
         File fileName = new File("./src/main/resources/config.txt");
-        StringBuilder result = new StringBuilder();
-        try
-        {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader reader = new BufferedReader(fr);
-            String line = "";
-            while (line != null)
-            {
-                line = reader.readLine();
-                if (line != null)
-                    result.append(line);
-            }
-            reader.close();
+        try {
+            return Files.lines(Paths.get(fileName.getAbsolutePath())).collect(Collectors.joining());
+        } catch (IOException e) {
+            String message = "Невозможно запустить бота, так как отсутствует конфигурационный файл";
+            System.out.println(message);
         }
-        catch (FileNotFoundException e)
-        {
-            System.out.println("Exception: File not found");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return result.toString();
+        return null;
     }
-
 }
